@@ -4,6 +4,7 @@ import YTSearch from 'youtube-api-search';
 
 import SearchBar from './components/searchbar';
 import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
 //Create a new component. THis component should produce some html
 
 const API_KEY = 'AIzaSyA7dLuVrpqvDLP-9YmGyGd1Gc83vZ6q2bE';
@@ -15,19 +16,28 @@ class App extends Component {
 		super(props);
 
 		this.state = {
-			videos: []
+			videos: [],
+			selectedVideo: null
 		};
 
 		YTSearch({key: API_KEY, term: 'world of tanks'}, videos => {
-			this.setState({ videos });
+			this.setState({ 
+				videos: videos, 
+				selectedVideo: videos[0]
+			});
 		});
 	}
 
 	render() {
+		console.log(this.state.videos[0]);
 		return ( 
 			<div>
 				<SearchBar />
-				<VideoList videos={this.state.videos} />
+				<VideoDetail	video={this.state.selectedVideo} />
+				<VideoList 
+					videos={this.state.videos} 
+					onVideoSelect={selectedVideo => this.setState({selectedVideo})} 
+				/>
 			</div>
 			)
 	}
